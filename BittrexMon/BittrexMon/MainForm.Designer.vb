@@ -124,7 +124,7 @@ Partial Class MainForm
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.dgv_OpenOrders)
         Me.Name = "MainForm"
-        Me.Text = "Bittrex"
+        Me.Text = "BittrexMon"
         CType(Me.dgv_OpenOrders, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.dgv_CompletedOrders, System.ComponentModel.ISupportInitialize).EndInit()
         Me.statusStrip.ResumeLayout(False)
