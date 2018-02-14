@@ -17,21 +17,31 @@
             Dim highest As List(Of CoinTradingAPI.Tick) = h.ToList()
 
             'Get list of lowest lows separated by highest highs
-            For i As Integer = 0 To lowest.Count - 2 Step +1
+            For i As Integer = 0 To lowest.Count - 3 Step +1
                 For Each highTick In highest
+                    Dim alreadyAdded = False
+                    Dim added = False
                     If (highTick.T.CompareTo(lowest(i).T) > 0 And highTick.T.CompareTo(lowest(i + 1).T) < 0) Then
-                        Dim alreadyAdded = False
-                        For Each r In opportunities
-                            If r.startTick.T = lowest(i + 1).T Then
-                                alreadyAdded = True
-                                Exit For
+                        For j = highest.IndexOf(highTick) To highest.Count - 1 Step +1
+                            If (highest(j).T.CompareTo(lowest(i + 1).T) > 0 And highest(j).T.CompareTo(lowest(i + 2).T) < 0) Then
+                                For Each r In opportunities
+                                    If r.startTick.T = lowest(i + 1).T Then
+                                        alreadyAdded = True
+                                        Exit For
+                                    End If
+                                Next
+
+                                If (Not alreadyAdded) Then
+                                    opportunities.Add(New Opporunity(lowest(i + 1), hourTicks.IndexOf(lowest(i + 1))))
+                                    added = True
+                                    Exit For
+                                End If
                             End If
                         Next
+                    End If
 
-                        If (Not alreadyAdded) Then
-                            opportunities.Add(New Opporunity(lowest(i + 1), hourTicks.IndexOf(lowest(i + 1))))
-                            Exit For
-                        End If
+                    If (added Or alreadyAdded) Then
+                        Exit For
                     End If
                 Next
             Next
