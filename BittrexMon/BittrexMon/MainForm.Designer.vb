@@ -46,7 +46,7 @@ Partial Class MainForm
         Me.dgv_OpenOrders.Name = "dgv_OpenOrders"
         Me.dgv_OpenOrders.RowHeadersVisible = False
         Me.dgv_OpenOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgv_OpenOrders.Size = New System.Drawing.Size(718, 185)
+        Me.dgv_OpenOrders.Size = New System.Drawing.Size(1040, 185)
         Me.dgv_OpenOrders.TabIndex = 0
         '
         'Label1
@@ -76,7 +76,7 @@ Partial Class MainForm
         Me.dgv_CompletedOrders.Name = "dgv_CompletedOrders"
         Me.dgv_CompletedOrders.RowHeadersVisible = False
         Me.dgv_CompletedOrders.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
-        Me.dgv_CompletedOrders.Size = New System.Drawing.Size(718, 185)
+        Me.dgv_CompletedOrders.Size = New System.Drawing.Size(1040, 185)
         Me.dgv_CompletedOrders.TabIndex = 3
         '
         'btn_GetOrders
@@ -93,7 +93,7 @@ Partial Class MainForm
         Me.statusStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.statusStripLabel})
         Me.statusStrip.Location = New System.Drawing.Point(0, 446)
         Me.statusStrip.Name = "statusStrip"
-        Me.statusStrip.Size = New System.Drawing.Size(740, 22)
+        Me.statusStrip.Size = New System.Drawing.Size(1062, 22)
         Me.statusStrip.TabIndex = 5
         '
         'statusStripLabel
@@ -115,7 +115,7 @@ Partial Class MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(740, 468)
+        Me.ClientSize = New System.Drawing.Size(1062, 468)
         Me.Controls.Add(Me.btn_CheckDelist)
         Me.Controls.Add(Me.statusStrip)
         Me.Controls.Add(Me.btn_GetOrders)
