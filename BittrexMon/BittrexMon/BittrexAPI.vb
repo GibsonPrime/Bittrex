@@ -657,6 +657,11 @@ Public Class BittrexAPI
         Public Condition As String
         Public ConditionTarget As String
 
+        Public ReadOnly Property OrderLimit As Double
+            Get
+                Return Me.Limit
+            End Get
+        End Property
         Public ReadOnly Property Type As String
             Get
                 Return Me.OrderType
@@ -670,11 +675,6 @@ Public Class BittrexAPI
         Public ReadOnly Property WhenOpened As DateTime
             Get
                 Return Me.Opened
-            End Get
-        End Property
-        Public ReadOnly Property OrderLimit As Double
-            Get
-                Return Me.Limit
             End Get
         End Property
         Public ReadOnly Property OrderQuantity As Double

@@ -9,14 +9,14 @@ Public Class MainForm
     Private Const READ_SECRET As String = "e2fa7ab96a684ecd8b7fdb7a52a21868"
     Private Const URL_MARKET As String = "https://bittrex.com/Market/Index?MarketName="
     Private Const DELIST_MESSAGE As String = "This market is getting delisted on"
-    Private Const DGVOPENORDERS_MARKETCOL As Integer = 1
+    Private Const DGVOPENORDERS_MARKETCOL As Integer = 4
 
     ' Tools
     Private updateStatusMehtod As UpdateStatusDelegate = New UpdateStatusDelegate(AddressOf UpdateStatus)
     Private _bittrexAPI As New BittrexAPI()
 
     ' Objects
-    Private _openOrders As New BindingList(Of BittrexAPI.OpenOrder)
+    Private _openOrders As New BindingList(Of Result)
     Private _openOrdersBS As BindingSource = New BindingSource()
     Private _completedOrders As New BindingList(Of BittrexAPI.ClosedOrder)
     Private _completedOrdersBS As BindingSource = New BindingSource()
@@ -51,7 +51,7 @@ Public Class MainForm
         UpdateStatus("Getting open orders...")
         Dim openOrders As List(Of BittrexAPI.OpenOrder) = _bittrexAPI.GetOpenOrders()
         For Each openOrder As BittrexAPI.OpenOrder In openOrders
-            _openOrders.Add(openOrder)
+            Me._openOrders.Add(New Result(openOrder, _bittrexAPI.GetMarketSummary(openOrder.Exchange)))
         Next
         dgv_OpenOrders.AutoResizeColumns(DataGridViewAutoSizeColumnsMode.AllCells)
 
@@ -112,4 +112,44 @@ Public Class MainForm
         Dim dgv As DataGridView = sender
         Process.Start(URL_MARKET + dgv.Rows(e.RowIndex).Cells(DGVOPENORDERS_MARKETCOL).Value)
     End Sub
+
+    Class Result
+        Inherits BittrexAPI.OpenOrder
+
+        Public MarketLastVal As Double
+        Public MarketPreviousDayVal As Double
+
+        Public ReadOnly Property MarketLast As Double
+            Get
+                Return Me.MarketLastVal
+            End Get
+        End Property
+        Public ReadOnly Property MarketPreviousDay As Double
+            Get
+                Return Me.MarketPreviousDayVal
+            End Get
+        End Property
+
+        Public Sub New(ByVal order As BittrexAPI.OpenOrder, ByVal marketSummary As BittrexAPI.MarketSummary)
+            Me.CancelInitiated = order.CancelInitiated
+            Me.Closed = order.Closed
+            Me.CommissionPaid = order.CommissionPaid
+            Me.Condition = order.Condition
+            Me.ConditionTarget = order.ConditionTarget
+            Me.Exchange = order.Exchange
+            Me.ImmediateOrCancel = order.ImmediateOrCancel
+            Me.IsConditional = order.IsConditional
+            Me.Limit = order.Limit
+            Me.Opened = order.Opened
+            Me.OrderType = order.OrderType
+            Me.OrderUuid = order.OrderUuid
+            Me.Price = order.Price
+            Me.PricePerUnit = order.PricePerUnit
+            Me.Quantity = order.Quantity
+            Me.QuantityRemaining = order.QuantityRemaining
+            Me.Uuid = order.Uuid
+            Me.MarketLastVal = marketSummary.Last
+            Me.MarketPreviousDayVal = marketSummary.PrevDay
+        End Sub
+    End Class
 End Class
