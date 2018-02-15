@@ -32,7 +32,7 @@
                                 Next
 
                                 If (Not alreadyAdded) Then
-                                    opportunities.Add(New Opporunity(lowest(i + 1), hourTicks.IndexOf(lowest(i + 1))))
+                                    opportunities.Add(New Opporunity(lowest(i + 2), hourTicks.IndexOf(lowest(i + 2))))
                                     added = True
                                     Exit For
                                 End If

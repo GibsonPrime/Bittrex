@@ -4,7 +4,7 @@ Public Class Form1
     Private Const MINSPAN = 1
     Private Const MAXSPAN = 10
     Private Const HIGHESTLOWESETPERCENT = 0.3
-    Private Const GOAL = 0.1
+    Private Const GOAL = 0.3
 
     Private sqlConnection As SqlClient.SqlConnection = New SqlClient.SqlConnection("Server=LENOVO\SQLEXPRESS;Database=CoinTrading;Trusted_Connection=True; ")
     Private coinTradingAPI As New CoinTradingAPI(sqlConnection)
