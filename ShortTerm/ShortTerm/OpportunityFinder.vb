@@ -88,12 +88,17 @@
             Dim curTick = result.startTick
 
             ' Best case - buy at low, sell at high
-            Dim goalmet = False
+            Dim goalmet As Boolean = False
+            Dim lastGain As Double = 0
             For i = opportunity.startTickIndex + 1 To hourTicks.Count - 1
                 curTick = hourTicks(i)
+                Dim curGain = (curTick.H - result.startTick.L) / result.startTick.L
 
-                If ((curTick.H - result.startTick.L) / result.startTick.L) >= goal Then
+                If curGain >= goal Then
                     goalmet = True
+                End If
+
+                If curGain < lastGain And goalmet Then
                     Exit For
                 End If
             Next

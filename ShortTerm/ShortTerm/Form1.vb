@@ -3,7 +3,7 @@
 Public Class Form1
     Private Const MINSPAN = 1
     Private Const MAXSPAN = 10
-    Private Const HIGHESTLOWESETPERCENT = 0.3
+    Private Const HIGHESTLOWESETPERCENT = 0.1
     Private Const GOAL = 0.3
 
     Private sqlConnection As SqlClient.SqlConnection = New SqlClient.SqlConnection("Server=LENOVO\SQLEXPRESS;Database=CoinTrading;Trusted_Connection=True; ")
@@ -67,6 +67,7 @@ Public Class Form1
         Private spanDays As Integer
         Private totalResults As Integer
         Private resultsTerminated As Integer
+        Private gainAverageTerminated As Double
         Private gainMin As Double
         Private gainMinAverage As Double
         Private gainAverage As Double
@@ -91,6 +92,11 @@ Public Class Form1
         Public ReadOnly Property NumTerminated As Integer
             Get
                 Return Me.resultsTerminated
+            End Get
+        End Property
+        Public ReadOnly Property TerminatedAverageGain As Double
+            Get
+                Return Me.gainAverageTerminated
             End Get
         End Property
         Public ReadOnly Property MinGain As Double
@@ -148,6 +154,7 @@ Public Class Form1
             Me.spanDays = span
             Me.totalResults = 0
             Me.resultsTerminated = 0
+            Me.gainAverageTerminated = 0
             Me.gainMin = 0
             Me.gainMinAverage = 0
             Me.gainAverage = 0
@@ -169,6 +176,8 @@ Public Class Form1
                     Me.totalResults += r.NumOpportunities
                     Me.resultsTerminated += r.NumTerminated
 
+                    Me.gainAverageTerminated += r.TerminatedAverageGain
+
                     Me.gainMinAverage += r.MinGain
                     Me.gainAverage += r.AverageGain
                     Me.gainMaxAverage += r.MaxGain
@@ -189,6 +198,7 @@ Public Class Form1
                         Me.daysMax = r.MaxDays
                     End If
                 Next
+                Me.gainAverageTerminated = Me.gainAverageTerminated / spanResults.Count
                 Me.gainMinAverage = Me.gainMinAverage / spanResults.Count
                 Me.gainAverage = Me.gainAverage / spanResults.Count
                 Me.gainMaxAverage = Me.gainMaxAverage / spanResults.Count
@@ -202,6 +212,7 @@ Public Class Form1
         Private marketName As String
         Private spanDays As Integer
         Private resultsTerminated As Integer
+        Private gainAverageTerminated As Double
         Private gainMin As Double
         Private gainAverage As Double
         Private gainMax As Double
@@ -229,6 +240,11 @@ Public Class Form1
         Public ReadOnly Property NumTerminated As Integer
             Get
                 Return Me.resultsTerminated
+            End Get
+        End Property
+        Public ReadOnly Property TerminatedAverageGain As Double
+            Get
+                Return Me.gainAverageTerminated
             End Get
         End Property
         Public ReadOnly Property MinGain As Double
@@ -267,6 +283,7 @@ Public Class Form1
             Me.spanDays = span
             Me.results = results
             Me.resultsTerminated = 0
+            Me.gainAverageTerminated = 0
             Me.gainMin = 0
             Me.gainAverage = 0
             Me.gainMax = 0
@@ -281,6 +298,7 @@ Public Class Form1
                 For Each r As OpportunityFinder.Result In Me.results
                     If (r.goalMet) Then
                         Me.resultsTerminated += 1
+                        Me.gainAverageTerminated += r.gain
                     End If
 
                     Me.gainAverage += r.gain
@@ -299,9 +317,14 @@ Public Class Form1
                         Me.daysMax = r.daysTaken
                     End If
                 Next
+                If (Me.resultsTerminated > 0) Then
+                    Me.gainAverageTerminated = Me.gainAverageTerminated / Me.resultsTerminated
+                Else
+                    Me.gainAverageTerminated = 0
+                End If
                 Me.gainAverage = Me.gainAverage / Me.results.Count
-                Me.daysAverage = Me.daysAverage / Me.results.Count
-            End If
+                    Me.daysAverage = Me.daysAverage / Me.results.Count
+                End If
         End Sub
     End Class
 End Class
