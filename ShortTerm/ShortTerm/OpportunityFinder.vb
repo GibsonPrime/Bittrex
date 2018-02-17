@@ -96,9 +96,6 @@
 
                 If curGain >= goal Then
                     goalmet = True
-                End If
-
-                If curGain < lastGain And goalmet Then
                     Exit For
                 End If
             Next
