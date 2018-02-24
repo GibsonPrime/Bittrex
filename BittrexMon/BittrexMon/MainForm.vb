@@ -8,7 +8,9 @@ Public Class MainForm
     Private Const READ_KEY As String = "5659a83b81de4cc9b15fc05124c06e4e"
     Private Const READ_SECRET As String = "e2fa7ab96a684ecd8b7fdb7a52a21868"
     Private Const URL_MARKET As String = "https://bittrex.com/Market/Index?MarketName="
-    Private Const DELIST_MESSAGE As String = "This market is getting delisted on"
+    Private Const CHECK_MESSAGE As String = "Checking your browser"
+    Private Const DELIST_MESSAGE As String = "This market will be delisted on"
+    Private Const REMOVE_MESSAGE As String = "market will be removed on"
     Private Const DGVOPENORDERS_MARKETCOL As Integer = 4
 
     ' Tools
@@ -74,21 +76,23 @@ Public Class MainForm
         Dim market As String = browser.Url.ToString().Substring(browser.Url.ToString().IndexOf("=") + 1)
 
         Dim delist = False
-        If (browser.Document.Body.ToString().Contains(DELIST_MESSAGE)) Then
-            delist = True
-        End If
-
-        For Each row As DataGridViewRow In dgv_OpenOrders.Rows
-            If (row.Cells(DGVOPENORDERS_MARKETCOL).Value = market) Then
-                If delist Then
-                    row.DefaultCellStyle.BackColor = Color.LightPink
-                Else
-                    row.DefaultCellStyle.BackColor = Color.LightGreen
-                End If
+        Dim html As String = browser.Document.Body.InnerHtml.ToString().ToUpper()
+        If (Not html.Contains(CHECK_MESSAGE.ToUpper())) Then
+            If (html.Contains(DELIST_MESSAGE.ToUpper()) Or html.Contains(REMOVE_MESSAGE.ToUpper())) Then
+                delist = True
             End If
-        Next
-        updateStatusMehtod("Checked " + market)
-        browser.Dispose()
+            For Each row As DataGridViewRow In dgv_OpenOrders.Rows
+                If (row.Cells(DGVOPENORDERS_MARKETCOL).Value = market) Then
+                    If delist Then
+                        row.DefaultCellStyle.BackColor = Color.LightPink
+                    Else
+                        row.DefaultCellStyle.BackColor = Color.LightGreen
+                    End If
+                End If
+            Next
+            updateStatusMehtod("Checked " + market)
+            browser.Dispose()
+        End If
     End Sub
 
     Private Sub UpdateStatus(Text As String)
@@ -104,8 +108,7 @@ Public Class MainForm
         For Each row As DataGridViewRow In dgv_OpenOrders.Rows
             row.DefaultCellStyle.BackColor = Color.White
         Next
-        Dim t As New Thread(New ThreadStart(AddressOf checkMarketsForDelist))
-        t.Start()
+        Me.checkMarketsForDelist()
     End Sub
 
     Private Sub dgv_OpenOrders_CellDoubleClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgv_OpenOrders.CellDoubleClick
