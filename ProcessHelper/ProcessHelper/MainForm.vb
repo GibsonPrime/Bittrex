@@ -95,7 +95,7 @@ Public Class MainForm
     Private Sub restartApplication()
         Try
             If (Not (Me._lastRestartTime = Nothing) And DateTime.Now.Subtract(Me._lastRestartTime).TotalMilliseconds < MainForm.FREQUENT_RESTART_LIMIT) Then
-                Throw New Exception("Frequent restart detected.  Possible causes:" + vbCrLf + "-Recurrent fialure." + vbCrLf + "-Insufficient restart time." + vbCrLf + "-Incorrect process name.")
+                Throw New Exception("Frequent restart detected.  Possibly caused by incorrect process name or frequent and rapid application failure.")
             End If
             Process.Start(Me._executablePath)
             Me._lastRestartTime = DateTime.Now
