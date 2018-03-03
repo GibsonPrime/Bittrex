@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class MainForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class MainForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txt_ProcessName = New System.Windows.Forms.TextBox()
@@ -29,8 +29,6 @@ Partial Class MainForm
         Me.txt_ExecutablePath = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.btn_Browse = New System.Windows.Forms.Button()
-        Me.Label3 = New System.Windows.Forms.Label()
-        Me.txt_RestartTime = New System.Windows.Forms.TextBox()
         Me.SuspendLayout()
         '
         'Label1
@@ -52,7 +50,7 @@ Partial Class MainForm
         '
         'btn_Stop
         '
-        Me.btn_Stop.Location = New System.Drawing.Point(90, 90)
+        Me.btn_Stop.Location = New System.Drawing.Point(90, 64)
         Me.btn_Stop.Name = "btn_Stop"
         Me.btn_Stop.Size = New System.Drawing.Size(75, 23)
         Me.btn_Stop.TabIndex = 2
@@ -61,7 +59,7 @@ Partial Class MainForm
         '
         'btn_Start
         '
-        Me.btn_Start.Location = New System.Drawing.Point(11, 90)
+        Me.btn_Start.Location = New System.Drawing.Point(11, 64)
         Me.btn_Start.Name = "btn_Start"
         Me.btn_Start.Size = New System.Drawing.Size(75, 23)
         Me.btn_Start.TabIndex = 3
@@ -94,30 +92,11 @@ Partial Class MainForm
         Me.btn_Browse.Text = "Browse"
         Me.btn_Browse.UseVisualStyleBackColor = True
         '
-        'Label3
-        '
-        Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(12, 64)
-        Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(67, 13)
-        Me.Label3.TabIndex = 7
-        Me.Label3.Text = "Restart Time"
-        '
-        'txt_RestartTime
-        '
-        Me.txt_RestartTime.Location = New System.Drawing.Point(90, 64)
-        Me.txt_RestartTime.Name = "txt_RestartTime"
-        Me.txt_RestartTime.Size = New System.Drawing.Size(332, 20)
-        Me.txt_RestartTime.TabIndex = 8
-        Me.txt_RestartTime.Text = "500"
-        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(515, 121)
-        Me.Controls.Add(Me.txt_RestartTime)
-        Me.Controls.Add(Me.Label3)
+        Me.ClientSize = New System.Drawing.Size(515, 95)
         Me.Controls.Add(Me.btn_Browse)
         Me.Controls.Add(Me.txt_ExecutablePath)
         Me.Controls.Add(Me.Label2)
@@ -140,6 +119,4 @@ Partial Class MainForm
     Friend WithEvents txt_ExecutablePath As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents btn_Browse As Button
-    Friend WithEvents Label3 As Label
-    Friend WithEvents txt_RestartTime As TextBox
 End Class

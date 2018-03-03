@@ -2,15 +2,15 @@
 Imports System.Timers
 
 Public Class MainForm
+    Private Const FREQUENT_RESTART_LIMIT As Integer = 100
+
     Private Delegate Sub ReportErrorDelegate(errorMessage As String)
     Private _reportError As ReportErrorDelegate = New ReportErrorDelegate(AddressOf reportError)
     Private _executablePath As String
     Private _processName As String
     Private _monitorThread As Thread = New Thread(New ThreadStart(AddressOf doMonitor))
     Private _doStop As Boolean = False
-    Private _restartTime As Integer
     Private _lastRestartTime As DateTime = Nothing
-    Private _recentRestartLimit As Integer = 0
 
     Private Sub btn_Browse_Click(sender As Object, e As EventArgs) Handles btn_Browse.Click
         Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
@@ -39,8 +39,6 @@ Public Class MainForm
                 Me._reportError("Specified executable does not exist.")
             Else
                 Try
-                    Me._restartTime = CInt(Me.txt_RestartTime.Text)
-                    Me._recentRestartLimit = Me._restartTime + 500
                     Me._executablePath = txt_ExecutablePath.Text
                     Me._processName = txt_ProcessName.Text
                     Me._doStop = False
@@ -96,11 +94,10 @@ Public Class MainForm
 
     Private Sub restartApplication()
         Try
-            If (Not (Me._lastRestartTime = Nothing) And DateTime.Now.Subtract(Me._lastRestartTime).TotalMilliseconds < Me._recentRestartLimit) Then
+            If (Not (Me._lastRestartTime = Nothing) And DateTime.Now.Subtract(Me._lastRestartTime).TotalMilliseconds < MainForm.FREQUENT_RESTART_LIMIT) Then
                 Throw New Exception("Frequent restart detected.  Possible causes:" + vbCrLf + "-Recurrent fialure." + vbCrLf + "-Insufficient restart time." + vbCrLf + "-Incorrect process name.")
             End If
             Process.Start(Me._executablePath)
-            Thread.Sleep(Me._restartTime)
             Me._lastRestartTime = DateTime.Now
         Catch ex As Exception
             Me.Invoke(Me._reportError, ex.Message)
