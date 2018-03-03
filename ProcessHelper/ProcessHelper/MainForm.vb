@@ -67,13 +67,13 @@ Public Class MainForm
     Private Sub doMonitor()
         Try
             'Start process if not found
-            If (getProcessID(Process.GetProcesses()) = 0) Then
+            If (Not isProcessRunning(Process.GetProcesses())) Then
                 restartApplication()
             End If
 
             'Monitor
             While (Not Me._doStop)
-                If (getProcessID(Process.GetProcesses()) = 0) Then
+                If (Not isProcessRunning(Process.GetProcesses())) Then
                     restartApplication()
                 End If
                 Thread.Sleep(1000)
@@ -83,13 +83,13 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Function getProcessID(ByVal processes As Process()) As Integer
+    Private Function isProcessRunning(ByVal processes As Process()) As Boolean
         For Each p As Process In processes
             If (p.ProcessName = Me._processName) Then
-                Return p.Id
+                Return True
             End If
         Next
-        Return 0 'PID = 0 is reserved for pseudo processes
+        Return False
     End Function
 
     Private Sub restartApplication()
