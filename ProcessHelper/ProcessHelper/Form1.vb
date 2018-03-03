@@ -1,4 +1,5 @@
 ﻿Imports System.Threading
+Imports System.Timers
 
 Public Class MainForm
     Private Delegate Sub HandleExceptionDelegate(ByVal ex As Exception)
@@ -8,6 +9,15 @@ Public Class MainForm
     Private _monitorThread As Thread = New Thread(New ThreadStart(AddressOf doMonitor))
     Private _doStop As Boolean = False
     Private _restartTime As Integer
+    Private _recentRestart As Boolean = False
+    Private _restartTimer As Timers.Timer
+
+    Sub New()
+        ' This call is required by the designer.
+        InitializeComponent()
+
+        ' Add any initialization after the InitializeComponent() call.
+    End Sub
 
     Private Sub btn_Browse_Click(sender As Object, e As EventArgs) Handles btn_Browse.Click
         Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
@@ -37,11 +47,14 @@ Public Class MainForm
             Else
                 Try
                     Me._restartTime = CInt(Me.txt_RestartTime.Text)
+                    Me._restartTimer = New Timers.Timer(_restartTime + 500)
+                    AddHandler Me._restartTimer.Elapsed, New ElapsedEventHandler(AddressOf resetRecentRestart)
                     Me._executablePath = txt_ExecutablePath.Text
                     Me._processName = txt_ProcessName.Text
                     Me._doStop = False
                     Me._monitorThread = New Thread(New ThreadStart(AddressOf doMonitor))
-                    Me._monitorThread.Start()
+                    'Me._monitorThread.Start()
+                    doMonitor()
                 Catch ex As Exception
                     Me._handleException(ex)
                 End Try
@@ -81,7 +94,7 @@ Public Class MainForm
         End Try
     End Sub
 
-    Private Function getProcessID(ByRef processes As Process()) As Integer
+    Private Function getProcessID(ByVal processes As Process()) As Integer
         For Each p As Process In processes
             If (p.ProcessName = Me._processName) Then
                 Return p.Id
@@ -92,13 +105,23 @@ Public Class MainForm
 
     Private Sub restartApplication()
         Try
+            If (Me._recentRestart) Then
+                Throw New Exception("Frequent restart detected.  Possible recurrent fialure or incorrect process name.")
+            End If
             Process.Start(Me._executablePath)
             Thread.Sleep(Me._restartTime)
             If (getProcessID(Process.GetProcesses()) = 0) Then
                 Throw New Exception("Failed to start/restart application.")
             End If
+            Me._recentRestart = True
+            Me._restartTimer.Start()
         Catch ex As Exception
             Me._handleException(ex)
         End Try
+    End Sub
+
+    Private Sub resetRecentRestart(sender As Object, e As EventArgs)
+        Me._recentRestart = False
+        Me._restartTimer.Stop()
     End Sub
 End Class
