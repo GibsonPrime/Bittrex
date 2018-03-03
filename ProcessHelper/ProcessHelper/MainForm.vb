@@ -12,13 +12,6 @@ Public Class MainForm
     Private _recentRestart As Boolean = False
     Private _restartTimer As Timers.Timer
 
-    Sub New()
-        ' This call is required by the designer.
-        InitializeComponent()
-
-        ' Add any initialization after the InitializeComponent() call.
-    End Sub
-
     Private Sub btn_Browse_Click(sender As Object, e As EventArgs) Handles btn_Browse.Click
         Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
 
