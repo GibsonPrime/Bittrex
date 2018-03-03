@@ -2,15 +2,15 @@
 Imports System.Timers
 
 Public Class MainForm
-    Private Delegate Sub HandleExceptionDelegate(ByVal ex As Exception)
-    Private _handleException As HandleExceptionDelegate = New HandleExceptionDelegate(AddressOf handleException)
+    Private Delegate Sub ReportErrorDelegate(errorMessage As String)
+    Private _reportError As ReportErrorDelegate = New ReportErrorDelegate(AddressOf reportError)
     Private _executablePath As String
     Private _processName As String
     Private _monitorThread As Thread = New Thread(New ThreadStart(AddressOf doMonitor))
     Private _doStop As Boolean = False
     Private _restartTime As Integer
-    Private _recentRestart As Boolean = False
-    Private _restartTimer As Timers.Timer
+    Private _lastRestartTime As DateTime = Nothing
+    Private _recentRestartLimit As Integer = 0
 
     Private Sub btn_Browse_Click(sender As Object, e As EventArgs) Handles btn_Browse.Click
         Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
@@ -32,24 +32,22 @@ Public Class MainForm
             MsgBox("Process helper is already monitoring " + _processName, MsgBoxStyle.OkOnly, "Already started.")
         Else
             If (Not txt_ExecutablePath.Text.Contains(".exe")) Then
-                Me._handleException(New Exception("Invalid executable path specified."))
+                Me._reportError("Invalid executable path specified.")
             ElseIf (txt_ProcessName.Text = "") Then
-                Me._handleException(New Exception("No process name specified."))
+                Me._reportError("No process name specified.")
             ElseIf (Not IO.File.Exists(txt_ExecutablePath.Text))
-                Me._handleException(New Exception("Specified executable does not exist."))
+                Me._reportError("Specified executable does not exist.")
             Else
                 Try
                     Me._restartTime = CInt(Me.txt_RestartTime.Text)
-                    Me._restartTimer = New Timers.Timer(_restartTime + 500)
-                    AddHandler Me._restartTimer.Elapsed, New ElapsedEventHandler(AddressOf resetRecentRestart)
+                    Me._recentRestartLimit = Me._restartTime + 500
                     Me._executablePath = txt_ExecutablePath.Text
                     Me._processName = txt_ProcessName.Text
                     Me._doStop = False
                     Me._monitorThread = New Thread(New ThreadStart(AddressOf doMonitor))
-                    'Me._monitorThread.Start()
-                    doMonitor()
+                    Me._monitorThread.Start()
                 Catch ex As Exception
-                    Me._handleException(ex)
+                    Me._reportError(ex.Message)
                 End Try
             End If
         End If
@@ -59,12 +57,12 @@ Public Class MainForm
         Me._doStop = True
     End Sub
 
-    Private Sub handleException(ByVal ex As Exception)
-        If (Me.InvokeRequired) Then
-            Me._handleException(ex)
+    Private Sub reportError(ByVal errorMessage As String)
+        If (InvokeRequired) Then
+            Me.Invoke(Me._reportError, New Object() {errorMessage})
         Else
             Me._doStop = True
-            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error")
+            MsgBox(errorMessage, MsgBoxStyle.OkOnly, "Error")
         End If
     End Sub
 
@@ -83,7 +81,7 @@ Public Class MainForm
                 Thread.Sleep(1000)
             End While
         Catch ex As Exception
-            Me._handleException(ex)
+            Me.Invoke(Me._reportError, ex.Message)
         End Try
     End Sub
 
@@ -98,23 +96,17 @@ Public Class MainForm
 
     Private Sub restartApplication()
         Try
-            If (Me._recentRestart) Then
-                Throw New Exception("Frequent restart detected.  Possible recurrent fialure or incorrect process name.")
+            If (Not (Me._lastRestartTime = Nothing) And DateTime.Now.Subtract(Me._lastRestartTime).TotalMilliseconds < Me._recentRestartLimit) Then
+                Throw New Exception("Frequent restart detected.  Possible causes:" + vbCrLf + "-Recurrent fialure." + vbCrLf + "-Insufficient restart time." + vbCrLf + "-Incorrect process name.")
             End If
             Process.Start(Me._executablePath)
             Thread.Sleep(Me._restartTime)
             If (getProcessID(Process.GetProcesses()) = 0) Then
                 Throw New Exception("Failed to start/restart application.")
             End If
-            Me._recentRestart = True
-            Me._restartTimer.Start()
+            Me._lastRestartTime = DateTime.Now
         Catch ex As Exception
-            Me._handleException(ex)
+            Me.Invoke(Me._reportError, ex.Message)
         End Try
-    End Sub
-
-    Private Sub resetRecentRestart(sender As Object, e As EventArgs)
-        Me._recentRestart = False
-        Me._restartTimer.Stop()
     End Sub
 End Class
