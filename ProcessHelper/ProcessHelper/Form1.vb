@@ -32,6 +32,8 @@ Public Class MainForm
                 Me._handleException(New Exception("Invalid executable path specified."))
             ElseIf (txt_ProcessName.Text = "") Then
                 Me._handleException(New Exception("No process name specified."))
+            ElseIf (Not IO.File.Exists(txt_ExecutablePath.Text))
+                Me._handleException(New Exception("Specified executable does not exist."))
             Else
                 Try
                     Me._restartTime = CInt(Me.txt_RestartTime.Text)
