@@ -46,7 +46,7 @@ Partial Class MainForm
         '
         Me.txt_ProcessName.Location = New System.Drawing.Point(90, 38)
         Me.txt_ProcessName.Name = "txt_ProcessName"
-        Me.txt_ProcessName.Size = New System.Drawing.Size(142, 20)
+        Me.txt_ProcessName.Size = New System.Drawing.Size(332, 20)
         Me.txt_ProcessName.TabIndex = 1
         Me.txt_ProcessName.Text = "notepad++.exe*32"
         '
@@ -72,7 +72,7 @@ Partial Class MainForm
         '
         Me.txt_ExecutablePath.Location = New System.Drawing.Point(90, 12)
         Me.txt_ExecutablePath.Name = "txt_ExecutablePath"
-        Me.txt_ExecutablePath.Size = New System.Drawing.Size(142, 20)
+        Me.txt_ExecutablePath.Size = New System.Drawing.Size(332, 20)
         Me.txt_ExecutablePath.TabIndex = 5
         Me.txt_ExecutablePath.Text = "C:\Program Files (x86)\Notepad++\notepad++.exe"
         '
@@ -87,7 +87,7 @@ Partial Class MainForm
         '
         'btn_Browse
         '
-        Me.btn_Browse.Location = New System.Drawing.Point(238, 12)
+        Me.btn_Browse.Location = New System.Drawing.Point(428, 10)
         Me.btn_Browse.Name = "btn_Browse"
         Me.btn_Browse.Size = New System.Drawing.Size(75, 23)
         Me.btn_Browse.TabIndex = 6
@@ -107,15 +107,15 @@ Partial Class MainForm
         '
         Me.txt_RestartTime.Location = New System.Drawing.Point(90, 64)
         Me.txt_RestartTime.Name = "txt_RestartTime"
-        Me.txt_RestartTime.Size = New System.Drawing.Size(142, 20)
+        Me.txt_RestartTime.Size = New System.Drawing.Size(332, 20)
         Me.txt_RestartTime.TabIndex = 8
         Me.txt_RestartTime.Text = "2500"
         '
-        'Form1
+        'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(324, 121)
+        Me.ClientSize = New System.Drawing.Size(515, 121)
         Me.Controls.Add(Me.txt_RestartTime)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btn_Browse)
@@ -125,7 +125,8 @@ Partial Class MainForm
         Me.Controls.Add(Me.btn_Stop)
         Me.Controls.Add(Me.txt_ProcessName)
         Me.Controls.Add(Me.Label1)
-        Me.Name = "Form1"
+        Me.Name = "MainForm"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "ProcessHelper"
         Me.ResumeLayout(False)
         Me.PerformLayout()
