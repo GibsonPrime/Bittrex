@@ -28,8 +28,8 @@ Public Class MainForm
     End Sub
 
     Private Sub btn_Start_Click(sender As Object, e As EventArgs) Handles btn_Start.Click
-        If (Me._monitorThread.ThreadState = ThreadState.Running) Then
-            MsgBox("Process helper is already monitoring " + _processName, MsgBoxStyle.OkOnly, "Already started.")
+        If (Not (Me._monitorThread.ThreadState = ThreadState.Stopped Or Me._monitorThread.ThreadState = ThreadState.Unstarted)) Then
+            MsgBox("Process helper is already monitoring " + _processName + ".", MsgBoxStyle.OkOnly, "Already started")
         Else
             If (Not txt_ExecutablePath.Text.Contains(".exe")) Then
                 Me._reportError("Invalid executable path specified.")
@@ -102,5 +102,9 @@ Public Class MainForm
         Catch ex As Exception
             Me.Invoke(Me._reportError, ex.Message)
         End Try
+    End Sub
+
+    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Me._doStop = True
     End Sub
 End Class
