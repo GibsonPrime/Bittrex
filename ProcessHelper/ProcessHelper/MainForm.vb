@@ -101,9 +101,6 @@ Public Class MainForm
             End If
             Process.Start(Me._executablePath)
             Thread.Sleep(Me._restartTime)
-            If (getProcessID(Process.GetProcesses()) = 0) Then
-                Throw New Exception("Failed to start/restart application.")
-            End If
             Me._lastRestartTime = DateTime.Now
         Catch ex As Exception
             Me.Invoke(Me._reportError, ex.Message)
