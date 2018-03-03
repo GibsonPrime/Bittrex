@@ -15,7 +15,7 @@ Public Class MainForm
         openFileDialog.Title = "Select application executable"
         openFileDialog.InitialDirectory = "C:\"
         openFileDialog.Filter = "Executables | *.exe"
-        openFileDialog.FilterIndex = 2
+        openFileDialog.FilterIndex = 0
         openFileDialog.RestoreDirectory = True
 
         If openFileDialog.ShowDialog() = DialogResult.OK Then
