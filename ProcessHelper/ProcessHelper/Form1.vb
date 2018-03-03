@@ -5,7 +5,8 @@ Public Class MainForm
     Private _handleException As HandleExceptionDelegate = New HandleExceptionDelegate(AddressOf handleException)
     Private _executablePath As String
     Private _processName As String
-    Private _monitorThread As Thread
+    Private _monitorThread As Thread = New Thread(New ThreadStart(AddressOf doMonitor))
+    Private _doStop As Boolean = False
     Private _restartTime As Integer
 
     Private Sub btn_Browse_Click(sender As Object, e As EventArgs) Handles btn_Browse.Click
@@ -19,77 +20,59 @@ Public Class MainForm
 
         If openFileDialog.ShowDialog() = DialogResult.OK Then
             Me.txt_ExecutablePath.Text = openFileDialog.FileName
-            Me.txt_ProcessName.Text = openFileDialog.SafeFileName
+            Me.txt_ProcessName.Text = openFileDialog.SafeFileName.Remove(openFileDialog.SafeFileName.Length - 4)
         End If
     End Sub
 
     Private Sub btn_Start_Click(sender As Object, e As EventArgs) Handles btn_Start.Click
-        If (Not txt_ExecutablePath.Text.Contains(".exe")) Then
-            Me._handleException(New Exception("Invalid executable path specified."))
-        ElseIf (txt_ProcessName.Text = "") Then
-            Me._handleException(New Exception("No process name specified."))
+        If (Me._monitorThread.ThreadState = ThreadState.Running) Then
+            MsgBox("Process helper is already monitoring " + _processName, MsgBoxStyle.OkOnly, "Already started.")
         Else
-            Try
-                Me._restartTime = CInt(Me.txt_RestartTime.Text)
-            Catch ex As Exception
-                Me._handleException(ex)
-            End Try
-
-            Me._executablePath = txt_ExecutablePath.Text
-            Me._processName = txt_ProcessName.Text
-
-            Me._monitorThread = New Thread(New ThreadStart(AddressOf doMonitor))
-            Me._monitorThread.Start()
+            If (Not txt_ExecutablePath.Text.Contains(".exe")) Then
+                Me._handleException(New Exception("Invalid executable path specified."))
+            ElseIf (txt_ProcessName.Text = "") Then
+                Me._handleException(New Exception("No process name specified."))
+            Else
+                Try
+                    Me._restartTime = CInt(Me.txt_RestartTime.Text)
+                    Me._executablePath = txt_ExecutablePath.Text
+                    Me._processName = txt_ProcessName.Text
+                    Me._doStop = False
+                    Me._monitorThread = New Thread(New ThreadStart(AddressOf doMonitor))
+                    Me._monitorThread.Start()
+                Catch ex As Exception
+                    Me._handleException(ex)
+                End Try
+            End If
         End If
     End Sub
 
     Private Sub btn_Stop_Click(sender As Object, e As EventArgs) Handles btn_Stop.Click
-        killMonitorThread()
+        Me._doStop = True
     End Sub
 
     Private Sub handleException(ByVal ex As Exception)
         If (Me.InvokeRequired) Then
             Me._handleException(ex)
         Else
-            killMonitorThread()
-            MsgBox("Process helper encountered an exception:  " + ex.Message, MsgBoxStyle.OkOnly, "Exception")
-        End If
-    End Sub
-
-    Private Sub killMonitorThread()
-        If (Me._monitorThread.IsAlive) Then
-            Me._monitorThread.Abort()
+            Me._doStop = True
+            MsgBox(ex.Message, MsgBoxStyle.OkOnly, "Error")
         End If
     End Sub
 
     Private Sub doMonitor()
         Try
-            Dim processes As Process() = Process.GetProcesses()
-            Dim pid As Integer = getProcessID(processes)
-
             'Start process if not found
-            If (pid = 0) Then  'PID 0 is reserved for pseudo processes
+            If (getProcessID(Process.GetProcesses()) = 0) Then
                 restartApplication()
-                processes = Process.GetProcesses()
-                pid = getProcessID(processes)
             End If
 
             'Monitor
-            Dim foundProcess As Boolean = False
-            While (True)
-                processes = Process.GetProcesses()
-                For Each p As Process In processes
-                    If (p.Id = pid) Then
-                        foundProcess = True
-                    End If
-                Next
-
-                If (Not foundProcess) Then
+            While (Not Me._doStop)
+                If (getProcessID(Process.GetProcesses()) = 0) Then
                     restartApplication()
                 End If
-
                 Thread.Sleep(1000)
-                foundProcess = False
             End While
         Catch ex As Exception
             Me._handleException(ex)
@@ -102,7 +85,7 @@ Public Class MainForm
                 Return p.Id
             End If
         Next
-        Return 0
+        Return 0 'PID = 0 is reserved for pseudo processes
     End Function
 
     Private Sub restartApplication()

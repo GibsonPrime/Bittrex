@@ -48,7 +48,7 @@ Partial Class MainForm
         Me.txt_ProcessName.Name = "txt_ProcessName"
         Me.txt_ProcessName.Size = New System.Drawing.Size(332, 20)
         Me.txt_ProcessName.TabIndex = 1
-        Me.txt_ProcessName.Text = "notepad++.exe*32"
+        Me.txt_ProcessName.Text = "notepad++"
         '
         'btn_Stop
         '
@@ -109,7 +109,7 @@ Partial Class MainForm
         Me.txt_RestartTime.Name = "txt_RestartTime"
         Me.txt_RestartTime.Size = New System.Drawing.Size(332, 20)
         Me.txt_RestartTime.TabIndex = 8
-        Me.txt_RestartTime.Text = "2500"
+        Me.txt_RestartTime.Text = "500"
         '
         'MainForm
         '
