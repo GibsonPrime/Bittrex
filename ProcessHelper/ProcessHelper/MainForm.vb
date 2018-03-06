@@ -15,6 +15,7 @@ Public Class MainForm
     Private _doStop As Boolean = False
     Private _lastRestartTime As DateTime = Nothing
 
+#Region "Form Controls"
     Private Sub btn_Browse_Click(sender As Object, e As EventArgs) Handles btn_Browse.Click
         Dim openFileDialog As OpenFileDialog = New OpenFileDialog()
 
@@ -64,6 +65,12 @@ Public Class MainForm
         Me._doStop = True
     End Sub
 
+    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        Me._doStop = True
+    End Sub
+#End Region
+
+#Region "Monitoring"
     Private Sub reportError(ByVal errorMessage As String)
         If (InvokeRequired) Then
             Me.Invoke(Me._reportError, New Object() {errorMessage})
@@ -148,8 +155,5 @@ Public Class MainForm
         Next
         Throw New Exception("Database checkin procedure did not return or parameter name is incorrect.")
     End Function
-
-    Private Sub MainForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
-        Me._doStop = True
-    End Sub
+#End Region
 End Class
