@@ -29,6 +29,12 @@ Partial Class MainForm
         Me.txt_ExecutablePath = New System.Windows.Forms.TextBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.btn_Browse = New System.Windows.Forms.Button()
+        Me.txt_SqlConnection = New System.Windows.Forms.TextBox()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.txt_SqlProcedure = New System.Windows.Forms.TextBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.txt_ProcedureOutput = New System.Windows.Forms.TextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -42,15 +48,15 @@ Partial Class MainForm
         '
         'txt_ProcessName
         '
-        Me.txt_ProcessName.Location = New System.Drawing.Point(90, 38)
+        Me.txt_ProcessName.Location = New System.Drawing.Point(99, 38)
         Me.txt_ProcessName.Name = "txt_ProcessName"
-        Me.txt_ProcessName.Size = New System.Drawing.Size(332, 20)
+        Me.txt_ProcessName.Size = New System.Drawing.Size(429, 20)
         Me.txt_ProcessName.TabIndex = 1
         Me.txt_ProcessName.Text = "notepad++"
         '
         'btn_Stop
         '
-        Me.btn_Stop.Location = New System.Drawing.Point(90, 64)
+        Me.btn_Stop.Location = New System.Drawing.Point(90, 142)
         Me.btn_Stop.Name = "btn_Stop"
         Me.btn_Stop.Size = New System.Drawing.Size(75, 23)
         Me.btn_Stop.TabIndex = 2
@@ -59,7 +65,7 @@ Partial Class MainForm
         '
         'btn_Start
         '
-        Me.btn_Start.Location = New System.Drawing.Point(11, 64)
+        Me.btn_Start.Location = New System.Drawing.Point(9, 142)
         Me.btn_Start.Name = "btn_Start"
         Me.btn_Start.Size = New System.Drawing.Size(75, 23)
         Me.btn_Start.TabIndex = 3
@@ -68,9 +74,9 @@ Partial Class MainForm
         '
         'txt_ExecutablePath
         '
-        Me.txt_ExecutablePath.Location = New System.Drawing.Point(90, 12)
+        Me.txt_ExecutablePath.Location = New System.Drawing.Point(99, 12)
         Me.txt_ExecutablePath.Name = "txt_ExecutablePath"
-        Me.txt_ExecutablePath.Size = New System.Drawing.Size(332, 20)
+        Me.txt_ExecutablePath.Size = New System.Drawing.Size(429, 20)
         Me.txt_ExecutablePath.TabIndex = 5
         Me.txt_ExecutablePath.Text = "C:\Program Files (x86)\Notepad++\notepad++.exe"
         '
@@ -85,18 +91,75 @@ Partial Class MainForm
         '
         'btn_Browse
         '
-        Me.btn_Browse.Location = New System.Drawing.Point(428, 10)
+        Me.btn_Browse.Location = New System.Drawing.Point(534, 10)
         Me.btn_Browse.Name = "btn_Browse"
         Me.btn_Browse.Size = New System.Drawing.Size(75, 23)
         Me.btn_Browse.TabIndex = 6
         Me.btn_Browse.Text = "Browse"
         Me.btn_Browse.UseVisualStyleBackColor = True
         '
+        'txt_SqlConnection
+        '
+        Me.txt_SqlConnection.Location = New System.Drawing.Point(97, 64)
+        Me.txt_SqlConnection.Name = "txt_SqlConnection"
+        Me.txt_SqlConnection.Size = New System.Drawing.Size(431, 20)
+        Me.txt_SqlConnection.TabIndex = 8
+        Me.txt_SqlConnection.Text = "Server=LENOVO\SQLEXPRESS;Database=CoinTrading;Trusted_Connection=True; "
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(6, 67)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(85, 13)
+        Me.Label3.TabIndex = 7
+        Me.Label3.Text = "SQL Connection"
+        '
+        'txt_SqlProcedure
+        '
+        Me.txt_SqlProcedure.Location = New System.Drawing.Point(97, 90)
+        Me.txt_SqlProcedure.Name = "txt_SqlProcedure"
+        Me.txt_SqlProcedure.Size = New System.Drawing.Size(431, 20)
+        Me.txt_SqlProcedure.TabIndex = 10
+        Me.txt_SqlProcedure.Text = "Bittrex.Checkin"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Location = New System.Drawing.Point(6, 93)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(80, 13)
+        Me.Label4.TabIndex = 9
+        Me.Label4.Text = "SQL Procedure"
+        '
+        'txt_ProcedureOutput
+        '
+        Me.txt_ProcedureOutput.Location = New System.Drawing.Point(97, 116)
+        Me.txt_ProcedureOutput.Name = "txt_ProcedureOutput"
+        Me.txt_ProcedureOutput.Size = New System.Drawing.Size(431, 20)
+        Me.txt_ProcedureOutput.TabIndex = 12
+        Me.txt_ProcedureOutput.Text = "Okay"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(6, 119)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(91, 13)
+        Me.Label5.TabIndex = 11
+        Me.Label5.Text = "Procedure Output"
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(515, 95)
+        Me.ClientSize = New System.Drawing.Size(617, 172)
+        Me.Controls.Add(Me.txt_ProcedureOutput)
+        Me.Controls.Add(Me.Label5)
+        Me.Controls.Add(Me.txt_SqlProcedure)
+        Me.Controls.Add(Me.Label4)
+        Me.Controls.Add(Me.txt_SqlConnection)
+        Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.btn_Browse)
         Me.Controls.Add(Me.txt_ExecutablePath)
         Me.Controls.Add(Me.Label2)
@@ -119,4 +182,10 @@ Partial Class MainForm
     Friend WithEvents txt_ExecutablePath As TextBox
     Friend WithEvents Label2 As Label
     Friend WithEvents btn_Browse As Button
+    Friend WithEvents txt_SqlConnection As TextBox
+    Friend WithEvents Label3 As Label
+    Friend WithEvents txt_SqlProcedure As TextBox
+    Friend WithEvents Label4 As Label
+    Friend WithEvents txt_ProcedureOutput As TextBox
+    Friend WithEvents Label5 As Label
 End Class
